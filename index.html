@@ -93,7 +93,7 @@ h2.sec{font-size:20px;margin:26px 0 6px}
 .lvl.sginfo{background:#e9f8f3;color:#0d4b3c;border-color:#19c2a0}#sgAskS{z-index:60}#sgBank{z-index:40}#sgCap{z-index:45}.sglist{display:grid;gap:10px}.sgi{display:grid;grid-template-columns:44px 1fr;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--paper)}.sglock{font-size:28px;text-align:center}.sgt{display:grid;gap:6px}.sgt span{font-size:13px;color:var(--mute,#5b6676)}.sgpadw{position:relative}#sgPad{display:block;border:1px solid var(--line);border-radius:12px;touch-action:none;background:#fff}.sgline{position:absolute;left:8%;bottom:10%;font-size:11px;color:#9aa5b4;pointer-events:none}.sgprev{background:repeating-conic-gradient(#e7eaef 0 25%,#fff 0 50%) 0 0/16px 16px;border-radius:12px;padding:8px;text-align:center}.sgprev canvas{max-width:100%;height:auto}.sgview{background:repeating-conic-gradient(#e7eaef 0 25%,#fff 0 50%) 0 0/16px 16px;border-radius:12px;padding:8px;text-align:center}.sgview img{max-width:100%}.sgbadge{font-size:11px;background:#19c2a0;color:#04221a;border-radius:8px;padding:1px 6px;margin-left:4px}
 .updbar{position:fixed;left:10px;right:10px;bottom:12px;z-index:90;display:flex;gap:8px;align-items:center;background:#13213a;color:#fff;border-radius:14px;padding:10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.3);font-size:14px}.updbar span{flex:1}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);opacity:0;pointer-events:none;z-index:95;background:#13213a;color:#fff;border-radius:12px;padding:10px 14px;font-size:14px;max-width:92vw;transition:.25s}.toast.on{opacity:1;transform:translate(-50%,0)}#penBtn[aria-pressed=true]{background:#e2b53a;color:#13213a;border-color:#e2b53a}
-.anstage{position:relative}.anzoom{position:absolute;right:8px;bottom:8px;display:flex;gap:4px;align-items:center;background:rgba(19,33,58,.88);color:#fff;border-radius:12px;padding:4px 6px;font-size:13px}.anzoom .btn{min-height:34px;padding:2px 10px}.answ{width:30px;height:30px;min-height:0!important;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #8a94a3;padding:0}.answ[aria-pressed=true]{box-shadow:0 0 0 3px #19c2a0}#capS{z-index:60}#anTools{position:sticky;top:0;z-index:2;background:var(--paper);padding-top:8px}#capS img{max-height:40vh}
+.anstage{position:relative}.anzoom{position:absolute;right:8px;top:8px;opacity:.92;display:flex;gap:4px;align-items:center;background:rgba(19,33,58,.88);color:#fff;border-radius:12px;padding:4px 6px;font-size:13px}.anzoom .btn{min-height:34px;padding:2px 10px}.answ{width:30px;height:30px;min-height:0!important;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #8a94a3;padding:0}.answ[aria-pressed=true]{box-shadow:0 0 0 3px #19c2a0}#capS{z-index:60}.antoolbar{flex:none;background:var(--paper);border-top:1px solid var(--line);padding:8px 10px 4px}.anchips{flex-wrap:nowrap!important;overflow-x:auto;padding-bottom:4px}.anchips .chip{flex:none}.anpanel{height:34vh!important}#capS img{max-height:40vh}
 .sfstage{position:relative;display:flex;align-items:center;justify-content:center;background:#20262f}.sfwrap{position:relative;line-height:0;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.45)}.sfbeam{position:absolute;left:0;right:0;height:6px;top:0;background:linear-gradient(90deg,rgba(16,185,129,.2),rgba(255,255,255,.95),rgba(16,185,129,.2));box-shadow:0 0 15px 4px rgba(16,185,129,.8),0 0 35px 10px rgba(52,211,153,.5);animation:sfBeam 1.3s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none}@keyframes sfBeam{0%{top:0}100%{top:100%}}.sfpre{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sfp{text-align:left;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--paper);display:grid;gap:2px;font:inherit;color:inherit;cursor:pointer}.sfp span{font-size:12px;color:#5b6676}.sfp[aria-pressed=true]{border-color:#19c2a0;background:#e9f8f3}
 .rttools{height:44vh;flex:none;overflow:auto;padding-top:0}#rtTabs{position:sticky;top:0;z-index:2;background:var(--paper);padding-top:10px}.rtv{display:flex;gap:8px;align-items:center}.rtv input{flex:1;min-width:0}.rtv b{min-width:3.6em;text-align:right;font-size:13px}.rtpal{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}.rtpal .sw{aspect-ratio:1;min-height:26px;border:1px solid #8a94a3;border-radius:5px;cursor:pointer}#rtEd input[type=color]{width:42px;height:32px;border:0;padding:0;vertical-align:middle;background:none}
 .sl{display:grid;grid-template-columns:7.5em 1fr;align-items:center;font-size:14px;gap:8px}
@@ -532,8 +532,8 @@ label.langbtn{display:inline-flex;align-items:center}
   <div class="top"><b id="anTitle">Page</b><div class="row"><button class="btn" id="anPrev" aria-label="Page précédente" style="min-height:40px">‹</button><button class="btn" id="anNext" aria-label="Page suivante" style="min-height:40px">›</button><button class="btn pri" id="anDone" style="min-height:40px">Terminé</button></div></div>
   <div class="stage anstage" id="anStage"><canvas id="aeC" style="touch-action:none"></canvas>
     <div class="anzoom"><button class="btn" id="anZo" aria-label="Zoom arrière">−</button><span id="anZv">100 %</span><button class="btn" id="anZi" aria-label="Zoom avant">+</button><button class="btn" id="anFit">Page entière</button></div></div>
-  <div class="tools rttools">
-    <div class="chips" id="anTools">
+  <div class="antoolbar">
+    <div class="chips anchips" id="anTools">
       <button class="chip" data-a="sel">✋ Sélection / déplacer</button>
       <button class="chip" data-a="sig">✍ Signature</button>
       <button class="chip" data-a="text">T Texte</button>
@@ -547,6 +547,8 @@ label.langbtn{display:inline-flex;align-items:center}
       <button class="chip" data-a="stamp">🔖 Tampon</button>
       <button class="chip" data-a="cap">⬚ Capturer une zone</button>
     </div>
+  </div>
+  <div class="tools rttools anpanel">
     <span class="note" id="anHint"></span>
     <div class="anp" data-p="sig">
       <div class="row" style="gap:6px"><button class="btn pri" id="anSigDraw">✍ Signer maintenant à l'écran</button><button class="btn" id="anSigImg">📥 Importer une image de signature</button><button class="btn" id="anSigPick">🔒 Choisir dans la banque</button></div>
@@ -1447,7 +1449,7 @@ function annDraw(x,a,W,H){x.save();const c=a.c||'#123a9c';
 function pageComposite(p,scale){const s=scale||1,c=document.createElement('canvas');c.width=Math.round(p.out.width*s);c.height=Math.round(p.out.height*s);const x=c.getContext('2d');x.drawImage(p.out,0,0,c.width,c.height);annList(p).forEach(a=>annDraw(x,a,c.width,c.height));return c}
 function pageThumb(p){p.thumb=pageComposite(p,Math.min(1,500/Math.max(p.out.width,p.out.height))).toDataURL('image/jpeg',.7)}
 /* éditeur */
-function anOpen(i){an.i=i;an.sel=-1;an.undo=[];an.redo=[];an.z=1;an.vx=an.vy=0;an.tile=null;$('anEd').hidden=false;anTool(an.tool||'sel');requestAnimationFrame(()=>{anSize();anDraw()})}
+function anOpen(i,tool){an.i=i;an.sel=-1;an.undo=[];an.redo=[];an.z=1;an.vx=an.vy=0;an.tile=null;$('anEd').hidden=false;anTool(tool||an.tool||'sel');if((tool||an.tool)==='sig')anSigInfo();document.querySelector('#anEd .anpanel').scrollTop=0;const ch=document.querySelector('#anTools [aria-pressed=true]');ch&&ch.scrollIntoView({inline:'center',block:'nearest'});requestAnimationFrame(()=>{anSize();anDraw()})}
 function anSize(){const st=$('anStage'),dpr=Math.min(2.5,devicePixelRatio||1),w=st.clientWidth,h=st.clientHeight;aeC.style.width=w+'px';aeC.style.height=h+'px';aeC.width=Math.round(w*dpr);aeC.height=Math.round(h*dpr)}
 function anFit(){const p=pages[an.i];return Math.min(aeC.width/p.out.width,aeC.height/p.out.height)*.96}
 function anView(){const p=pages[an.i],s=anFit()*an.z,w=p.out.width*s,h=p.out.height*s;return{s,w,h,ox:(aeC.width-w)/2+an.vx,oy:(aeC.height-h)/2+an.vy}}
@@ -1691,7 +1693,7 @@ function drawPages(){
   $('pages').innerHTML=pages.map((p,i)=>`<div class="pg"><button class="th" data-e="${i}" aria-label="Modifier la page ${i+1}"><img src="${p.thumb}" alt="">${Math.abs(p.tilt||0)>.5?`<span class="tiltb">⚠ ${Math.abs(p.tilt).toFixed(1)}°</span>`:''}</button><div class="meta"><button data-u="${i}" aria-label="Monter" ${i?'':'disabled'}>‹</button><span>Page ${i+1}${p.ann&&p.ann.length?'<i class="sgbadge">✍</i>':''}</span><button data-sg="${i}" aria-label="Annoter ou signer la page ${i+1}">✍</button><button data-d="${i}" aria-label="Descendre" ${i<pages.length-1?'':'disabled'}>›</button></div></div>`).join('');
   const has=pages.length>0;$('empty').hidden=has;['pdfBtn','jpgBtn','clearBtn','ocrBtn','reconBtn'].forEach(b=>$(b).disabled=!has)}
 $('pages').onclick=e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
-  if(d.sg!=null){anOpen(+d.sg);return}if(d.e!=null)openEd(+d.e);else if(d.u!=null){const i=+d.u;[pages[i-1],pages[i]]=[pages[i],pages[i-1]];drawPages()}else if(d.d!=null){const i=+d.d;[pages[i+1],pages[i]]=[pages[i],pages[i+1]];drawPages()}};
+  if(d.sg!=null){anOpen(+d.sg,'sig');return}if(d.e!=null)openEd(+d.e);else if(d.u!=null){const i=+d.u;[pages[i-1],pages[i]]=[pages[i],pages[i-1]];drawPages()}else if(d.d!=null){const i=+d.d;[pages[i+1],pages[i]]=[pages[i],pages[i+1]];drawPages()}};
 let armed=false;
 $('clearBtn').onclick=()=>{if(!armed){armed=true;$('clearBtn').textContent='Confirmer l\'effacement';setTimeout(()=>{armed=false;$('clearBtn').textContent='Tout effacer'},3000);return}pages=[];armed=false;$('clearBtn').textContent='Tout effacer';drawPages();say('docMsg','Document effacé.')};
 
@@ -2461,7 +2463,7 @@ $('csvBtn').onclick=async()=>{if(!hist.length){say('qrMsg','Historique vide.');r
 $('docPaper').value=paper;$('docPaper').onchange=e=>{paper=e.target.value;try{localStorage.setItem('scan_paper',paper)}catch(_){}pages.forEach(p=>{if(p.a4)render(p)});drawPages();say('docMsg','Format '+PAPER[paper].name+' appliqué aux pages.')};
 try{const v=localStorage.getItem('scan_lang');if(v)$('docLang').value=v}catch(e){}$('docLang').onchange=e=>{try{localStorage.setItem('scan_lang',e.target.value)}catch(_){}};
 drawPages();drawQr();setUI(UI);
-{const r=$('ready');r.textContent='✓ Application prête (v34)';r.style.color='#19c2a0'}
+{const r=$('ready');r.textContent='✓ Application prête (v35)';r.style.color='#19c2a0'}
 }
 </script>
 </body>
