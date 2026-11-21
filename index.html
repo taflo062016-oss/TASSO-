@@ -518,11 +518,12 @@ label.langbtn{display:inline-flex;align-items:center}
       <label class="lbl">Couleur <select id="sgRecol" class="sel"><option value="orig">D'origine</option><option value="#123a9c">Bleu</option><option value="#111111">Noir</option></select></label>
       <div class="sgprev"><canvas id="sgImgC"></canvas></div>
     </div>
-    <h3 class="mth">Protection</h3>
+    <h3 class="mth">Enregistrement</h3>
+    <label class="mtck"><input type="checkbox" id="sgKeep" checked> Enregistrer dans la banque de signatures, protégée par un mot de passe</label>
     <label class="lbl">Nom de la signature <input id="sgName" class="sel" placeholder="Ex. : NKENLIFACK Florent – Directeur" autocomplete="off"></label>
-    <label class="lbl">Mot de passe (6 caractères minimum) <input id="sgPw1" class="sel" type="password" autocomplete="new-password"></label>
+    <div id="sgPwBox" style="display:grid;gap:8px"><label class="lbl">Mot de passe (6 caractères minimum) <input id="sgPw1" class="sel" type="password" autocomplete="new-password"></label>
     <label class="lbl">Confirmer le mot de passe <input id="sgPw2" class="sel" type="password" autocomplete="new-password"></label>
-    <label class="mtck"><input type="checkbox" id="sgShow"> Afficher les mots de passe</label>
+    <label class="mtck"><input type="checkbox" id="sgShow"> Afficher les mots de passe</label></div>
     <button class="btn pri" id="sgSave">🔒 Chiffrer et enregistrer dans la banque</button>
     <div id="sgCapMsg" class="msg" role="status"></div>
   </div>
@@ -546,10 +547,10 @@ label.langbtn{display:inline-flex;align-items:center}
       <button class="chip" data-a="stamp">🔖 Tampon</button>
       <button class="chip" data-a="cap">⬚ Capturer une zone</button>
     </div>
-    <div class="row" style="gap:6px"><button class="btn" id="anUndo">↶ Annuler</button><button class="btn" id="anRedo">↷ Rétablir</button><button class="btn warn" id="anDel" disabled>🗑 Supprimer l'élément</button><button class="btn" id="anDup" disabled>⧉ Dupliquer</button><button class="btn" id="anAll" disabled>Copier sur toutes les pages</button></div>
     <span class="note" id="anHint"></span>
     <div class="anp" data-p="sig">
-      <div class="row"><button class="btn pri" id="anSigPick">✍ Choisir dans la banque de signatures</button></div>
+      <div class="row" style="gap:6px"><button class="btn pri" id="anSigDraw">✍ Signer maintenant à l'écran</button><button class="btn" id="anSigImg">📥 Importer une image de signature</button><button class="btn" id="anSigPick">🔒 Choisir dans la banque</button></div>
+      <span class="note" id="anSigCur" style="margin:0"></span>
       <label class="mtck"><input type="checkbox" id="anSigName" checked> Ajouter le nom du signataire sous la signature (modifiable)</label>
       <label class="mtck"><input type="checkbox" id="anSigDate"> Ajouter la date du jour</label>
     </div>
@@ -569,6 +570,7 @@ label.langbtn{display:inline-flex;align-items:center}
     <div class="anp" data-p="page">
       <div class="row" style="gap:6px"><button class="btn" id="anRotP">↻ Pivoter la page</button><button class="btn" id="anCapPage">⬚ Page entière en image</button><button class="btn warn" id="anDelP">Supprimer la page</button></div>
     </div>
+    <div class="row" style="gap:6px"><button class="btn" id="anUndo">↶ Annuler</button><button class="btn" id="anRedo">↷ Rétablir</button><button class="btn warn" id="anDel" disabled>🗑 Supprimer l'élément</button><button class="btn" id="anDup" disabled>⧉ Dupliquer</button><button class="btn" id="anAll" disabled>Copier sur toutes les pages</button></div>
     <div id="anMsg" class="msg" role="status"></div>
   </div>
 </div>
@@ -760,6 +762,8 @@ Object.assign(I18N_EX,{"Annoter et signer": "Annotate and sign", "Terminé": "Do
 I18N_RX.push([/^Page (\d+) \/ (\d+)$/,'Page $1 / $2']);
 Object.assign(I18N_EX,{"APPROUVÉ": "APPROVED", "REÇU": "RECEIVED", "PAYÉ": "PAID", "COPIE CONFORME": "CERTIFIED COPY", "VU": "SEEN", "CONFIDENTIEL": "CONFIDENTIAL", "ANNULÉ": "CANCELLED"});
 Object.assign(I18N_EX,{"🖨 Effet document scanné": "🖨 Scanned-document effect", "Effet document scanné": "Scanned-document effect", "Effet « document scanné »": "“Scanned document” effect", "↻ Re-scanner": "↻ Re-scan", "📄 PDF scanné (toutes les pages)": "📄 Scanned PDF (all pages)", "🖼 Image de cette page": "🖼 Image of this page", "Préréglages du scanner": "Scanner presets", "Bureau standard": "Standard office", "Net, léger grain, ombre de la vitre": "Sharp, light grain, glass shadow", "Scan rapide incliné": "Quick tilted scan", "Feuille de biais, rouleau visible": "Skewed sheet, roller visible", "Archive jaunie": "Yellowed archive", "Papier ancien, fibres, encre douce": "Old paper, fibres, soft ink", "Photocopie N&B": "B&W photocopy", "Contraste fort, seuil binaire": "High contrast, binary threshold", "Positionnement sur la vitre": "Position on the glass", "Inclinaison": "Skew", "Inclinaison légèrement différente sur chaque page": "Slightly different skew on each page", "Ombre du capot / bord de feuille": "Lid / sheet-edge shadow", "Trace du rouleau d'entraînement en haut": "Feed-roller mark at the top", "Capteur optique et couleurs": "Optical sensor and colours", "Couleur": "Colour", "Gris": "Grey", "Noir et blanc": "Black and white", "Luminosité de la lampe": "Lamp brightness", "Saturation des encres": "Ink saturation", "Flou optique / diffusion de l'encre": "Optical blur / ink spread", "Grain du capteur": "Sensor grain", "Papier et défauts": "Paper and defects", "⚪ Blanc pur": "⚪ Pure white", "Cassé": "Off-white", "Jauni": "Yellowed", "Recyclé gris": "Grey recycled", "Fibres du papier": "Paper fibres", "Poussières et points de toner": "Dust and toner specks", "Résolution du scan": "Scan resolution", "À utiliser pour vos propres documents, par exemple quand on vous demande un document « imprimé, signé et scanné ». Ne vous en servez pas pour faire passer une copie pour un original auprès d'une administration.": "Use it for your own documents, for example when you are asked for a document that is “printed, signed and scanned”. Do not use it to pass off a copy as an original with an administration.", "Ajoutez d'abord des pages (photo, galerie ou PDF).": "First add pages (photo, gallery or PDF).", "Vérifiez le mot de passe du PDF dans l'onglet Documents.": "Check the PDF password in the Documents tab.", "Numérisation de la page": "Scanning page", "PDF scanné enregistré": "Scanned PDF saved", "Image enregistrée.": "Image saved."});
+Object.assign(I18N_EX,{"✍ Signer maintenant à l'écran": "✍ Sign now on screen", "📥 Importer une image de signature": "📥 Import a signature image", "🔒 Choisir dans la banque": "🔒 Choose from the bank", "Enregistrement": "Saving", "Enregistrer dans la banque de signatures, protégée par un mot de passe": "Save to the signature bank, protected by a password", "✓ Utiliser cette signature sans l'enregistrer": "✓ Use this signature without saving it", "Signature": "Signature", "Choisissez comment signer : à l'écran, avec une image, ou une signature de la banque.": "Choose how to sign: on screen, with an image, or a signature from the bank.", "Choisissez d'abord une signature avec les boutons ci-dessous.": "First choose a signature with the buttons below."});
+Object.assign(I18N_EX,{"Signez à l'écran, importez une image ou prenez une signature de la banque, puis touchez l'endroit où la poser.": "Sign on screen, import an image or take a signature from the bank, then tap where to place it."});
 function tr(s){if(UI!=='en'||!s)return s;const t=s.trim();if(!t)return s;if(Object.prototype.hasOwnProperty.call(I18N_EX,t))return s.replace(t,I18N_EX[t]);let o=s;for(const[r,rep]of I18N_RX)o=o.replace(r,rep);return o}
 const LOC=()=>UI==='en'?'en-GB':'fr-FR';
 const ORIG=new WeakMap(),LAST=new WeakMap();
@@ -1383,20 +1387,26 @@ function sgImgPrev(){const pc=$('sgImgC'),o=sgFromImage();if(!o){pc.width=pc.hei
 ['sgImg','sgImgCam'].forEach(id=>$(id).onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{sgImgSrc=await loadImg(f,1600);sgImgPrev()}catch(_){say('sgCapMsg',tr('Image illisible.'))}});
 $('sgThr').oninput=()=>{$('sgThr').nextElementSibling.textContent=$('sgThr').value;clearTimeout(sgImgPrev.t);sgImgPrev.t=setTimeout(sgImgPrev,120)};$('sgRecol').onchange=sgImgPrev;
 $('sgShow').onchange=()=>['sgPw1','sgPw2'].forEach(id=>$(id).type=$('sgShow').checked?'text':'password');
-$('sgNew').onclick=()=>{sgStrokes=[];sgImgSrc=null;['sgName','sgPw1','sgPw2'].forEach(id=>$(id).value='');say('sgCapMsg','');$('sgCap').hidden=false;$('sgThick').oninput();$('sgThr').oninput();requestAnimationFrame(sgPadSize)};
-$('sgCapCancel').onclick=()=>{$('sgCap').hidden=true;sgStrokes=[];sgImgSrc=null};
+let sgCapCb=null;
+function sgKeepSync(){const k=$('sgKeep').checked;$('sgPwBox').hidden=!k;$('sgSave').textContent=tr(k?'🔒 Chiffrer et enregistrer dans la banque':'✓ Utiliser cette signature sans l\'enregistrer')}
+$('sgKeep').onchange=sgKeepSync;
+function sgOpenCap(mode,cb){sgCapCb=cb||null;sgStrokes=[];sgImgSrc=null;['sgName','sgPw1','sgPw2'].forEach(id=>$(id).value='');say('sgCapMsg','');$('sgKeep').checked=true;sgKeepSync();$('sgCap').hidden=false;$('sgThick').oninput();$('sgThr').oninput();
+  const b=$('sgCapTabs').querySelector(`[data-c="${mode||'draw'}"]`);b&&b.click();requestAnimationFrame(()=>{if(sgMode==='draw')sgPadSize()})}
+$('sgNew').onclick=()=>sgOpenCap('draw',sgPickCb?((img,name,dec)=>{const cb=sgPickCb;$('sgBank').hidden=true;sgPickCb=null;cb(img,name,dec)}):null);
+$('sgCapCancel').onclick=()=>{$('sgCap').hidden=true;sgStrokes=[];sgImgSrc=null;sgCapCb=null};
 addEventListener('resize',()=>{if(!$('sgCap').hidden&&sgMode==='draw')sgPadSize()});
 $('sgSave').onclick=async()=>{let out,vec=null;if(sgMode==='draw'){if(!sgStrokes.length){say('sgCapMsg',tr('Signez d\'abord dans le cadre.'));return}
     let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;sgStrokes.forEach(s=>s.pts.forEach(p=>{const r=s.w*Math.max(1,p[2]||1)/2;x0=Math.min(x0,p[0]-r);y0=Math.min(y0,p[1]-r);x1=Math.max(x1,p[0]+r);y1=Math.max(y1,p[1]+r)}));const bw=Math.max(.01,x1-x0),ar=Math.max(.05,(y1-y0)/bw);
     const strokes=sgStrokes.map(s=>({c:s.c,w:s.w/bw,pts:s.pts.map(p=>[+((p[0]-x0)/bw).toFixed(5),+((p[1]-y0)/bw).toFixed(5),+(p[2]||1).toFixed(3)])}));
     const W=1200,c=document.createElement('canvas');c.width=W;c.height=Math.max(1,Math.round(W*ar));const x=c.getContext('2d');x.translate(W/2,W*ar/2);x.lineCap='round';x.lineJoin='round';strokes.forEach(st=>{x.strokeStyle=st.c;x.fillStyle=st.c;sigSegs(st,W,ar).forEach(g=>{if(g.dot){x.beginPath();x.arc(g.dot[0],g.dot[1],g.w/2,0,7);x.fill();return}x.lineWidth=g.w;x.beginPath();x.moveTo(...g.s);x.quadraticCurveTo(...g.q,...g.e);x.stroke()})});out=c;vec={strokes,ar}}else out=sgFromImage();
   if(!out){say('sgCapMsg',tr('Aucune signature détectée : choisissez une image ou réglez le nettoyage du fond.'));return}
-  const name=$('sgName').value.trim(),pw=$('sgPw1').value,err=!name?tr('Donnez un nom à la signature.'):sgPwRule(pw,$('sgPw2').value);if(err){say('sgCapMsg',err);return}
+  const keep=$('sgKeep').checked,name=$('sgName').value.trim()||(keep?'':tr('Signature')),pw=$('sgPw1').value,err=!name?tr('Donnez un nom à la signature.'):keep?sgPwRule(pw,$('sgPw2').value):'';if(err){say('sgCapMsg',err);return}
   if(!vec&&out.width>1000){const k=1000/out.width,c=document.createElement('canvas');c.width=1000;c.height=Math.round(out.height*k);c.getContext('2d').drawImage(out,0,0,c.width,c.height);out=c}
-  say('sgCapMsg',tr('Vérification que le mot de passe n\'est pas déjà utilisé…'));if(!(await sgPwUnique(pw))){say('sgCapMsg',tr('Ce mot de passe est déjà utilisé par une autre signature : choisissez-en un différent.'));return}
-  say('sgCapMsg',tr('Chiffrement…'));let png=new Uint8Array(await (await new Promise(r=>out.toBlob(r,'image/png'))).arrayBuffer());if(vec)png=new TextEncoder().encode(JSON.stringify({v:2,png:b64e(png),strokes:vec.strokes,ar:vec.ar}));
-  sigs.push({id:Date.now(),name,created:Date.now(),enc:await sgSeal(png,pw),tries:0});if(!sgStore()){sigs.pop();return}
-  $('sgPw1').value=$('sgPw2').value='';$('sgCap').hidden=true;sgStrokes=[];sgImgSrc=null;sgDrawList();say('sgMsg',`${tr('Signature enregistrée et chiffrée')} : ${name}.`)};
+  const rawPng=new Uint8Array(await (await new Promise(r=>out.toBlob(r,'image/png'))).arrayBuffer());
+  if(keep){say('sgCapMsg',tr('Vérification que le mot de passe n\'est pas déjà utilisé…'));if(!(await sgPwUnique(pw))){say('sgCapMsg',tr('Ce mot de passe est déjà utilisé par une autre signature : choisissez-en un différent.'));return}
+    say('sgCapMsg',tr('Chiffrement…'));const payload=vec?new TextEncoder().encode(JSON.stringify({v:2,png:b64e(rawPng),strokes:vec.strokes,ar:vec.ar})):rawPng;
+    sigs.push({id:Date.now(),name,created:Date.now(),enc:await sgSeal(payload,pw),tries:0});if(!sgStore()){sigs.pop();return}sgDrawList();say('sgMsg',`${tr('Signature enregistrée et chiffrée')} : ${name}.`)}
+  $('sgPw1').value=$('sgPw2').value='';$('sgCap').hidden=true;sgStrokes=[];sgImgSrc=null;const cb=sgCapCb;sgCapCb=null;if(cb)cb(out,name,{png:rawPng,strokes:vec?vec.strokes:null,ar:vec?vec.ar:out.height/out.width})};
 
 /* ---------- Annoter / signer les pages (PDF) ---------- */
 const SIGMEM={};let sigSeq=0;
@@ -1457,7 +1467,7 @@ let anTileT=0;function anTileLater(){clearTimeout(anTileT);const p=pages[an.i];i
   if(an.i!==i||an.z!==z||an.vx!==vx||an.vy!==vy)return;an.tile={c,x:Math.max(0,v.ox),y:Math.max(0,v.oy),z,vx,vy,i};anDraw()}catch(e){}},260)}
 function anSnap(){an.undo.push(JSON.stringify(annList(pages[an.i])));if(an.undo.length>60)an.undo.shift();an.redo=[]}
 function anCommit(){const p=pages[an.i];pageThumb(p);drawPages();anDraw()}
-const AN_HINT={sel:'Touchez un élément pour le sélectionner, glissez-le pour le déplacer, tirez le carré vert pour l\'agrandir. Sur une zone vide : glissez pour vous déplacer dans la page.',sig:'Choisissez une signature (son mot de passe sera demandé), puis touchez l\'endroit où la poser.',text:'Touchez la page à l\'endroit du cadre de texte, puis écrivez dans le champ « Texte ».',hl:'Faites glisser sur le passage à surligner.',ul:'Faites glisser sous la ligne à souligner.',st:'Faites glisser sur le texte à barrer.',ink:'Dessinez librement au doigt ou au stylet.',rect:'Faites glisser pour tracer le cadre.',arrow:'Faites glisser du départ vers la pointe de la flèche.',white:'Faites glisser sur la zone à cacher : elle sera recouverte de blanc.',stamp:'Choisissez le tampon, puis touchez la page.',cap:'Faites glisser pour choisir la zone à capturer.'};
+const AN_HINT={sel:'Touchez un élément pour le sélectionner, glissez-le pour le déplacer, tirez le carré vert pour l\'agrandir. Sur une zone vide : glissez pour vous déplacer dans la page.',sig:'Signez à l\'écran, importez une image ou prenez une signature de la banque, puis touchez l\'endroit où la poser.',text:'Touchez la page à l\'endroit du cadre de texte, puis écrivez dans le champ « Texte ».',hl:'Faites glisser sur le passage à surligner.',ul:'Faites glisser sous la ligne à souligner.',st:'Faites glisser sur le texte à barrer.',ink:'Dessinez librement au doigt ou au stylet.',rect:'Faites glisser pour tracer le cadre.',arrow:'Faites glisser du départ vers la pointe de la flèche.',white:'Faites glisser sur la zone à cacher : elle sera recouverte de blanc.',stamp:'Choisissez le tampon, puis touchez la page.',cap:'Faites glisser pour choisir la zone à capturer.'};
 function anTool(t){an.tool=t;$('anTools').querySelectorAll('[data-a]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.a===t));$('anHint').textContent=tr(AN_HINT[t]||'');
   const show={sig:['sig'],text:['text','style'],stamp:['stamp','style'],hl:['style'],ul:['style'],st:['style'],ink:['style'],rect:['style'],arrow:['style'],sel:['page','style'],white:[],cap:['page']}[t]||[];
   document.querySelectorAll('#anEd .anp').forEach(d=>d.hidden=!show.includes(d.dataset.p));anCols();$('anCols').hidden=false;const dv={text:12,stamp:21,ink:3,rect:3,arrow:3,ul:3,st:3}[t];if(dv){$('anSize').value=dv;$('anSize').nextElementSibling.textContent=dv}
@@ -1474,10 +1484,13 @@ function anSyncProps(){const a=anSelA();if(!a){anTool(an.tool);return}if(a.t==='
   const v=a.t==='text'||a.t==='stamp'?Math.round(a.fs*700):a.t==='sig'?Math.round(a.w*100):a.lw!=null?Math.round(a.lw*1400):12;$('anSize').value=v;$('anSize').nextElementSibling.textContent=v;anCols();
   const show=new Set(['page']);if(a.t!=='white')show.add('style');if(a.t==='text')show.add('text');document.querySelectorAll('#anEd .anp').forEach(d=>d.hidden=!show.has(d.dataset.p));
   $('anBoldL').hidden=a.t!=='text';$('anSizeL').hidden=a.t==='hl'||a.t==='white';$('anCols').hidden=a.t==='sig'||a.t==='white'}
-$('anTools').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;an.sel=-1;anTool(b.dataset.a);if(b.dataset.a==='sig'&&!an.lastSig)anPickSig();anDraw()};
+$('anTools').onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;an.sel=-1;anTool(b.dataset.a);anSigInfo();anDraw()};
 /* signature depuis la banque */
 function sigDecode(bytes){if(bytes[0]===0x89&&bytes[1]===0x50)return{png:bytes,strokes:null};try{const j=JSON.parse(new TextDecoder().decode(bytes));return{png:b64d(j.png),strokes:j.strokes||null,ar:j.ar}}catch(e){return{png:bytes,strokes:null}}}
-function anPickSig(){openBank(async(img,name,dec)=>{const k='s'+(++sigSeq);SIGMEM[k]={img,name,strokes:dec&&dec.strokes,ar:dec&&dec.ar?dec.ar:img.height/img.width,png:dec&&dec.png};an.lastSig=k;anTool('sig');say('anMsg',`${tr('Signature prête')} : ${name}. ${tr('Touchez la page pour la poser.')}`)})}
+function anUseSig(img,name,dec){const k='s'+(++sigSeq);SIGMEM[k]={img,name,strokes:dec&&dec.strokes,ar:dec&&dec.ar?dec.ar:img.height/img.width,png:dec&&dec.png};an.lastSig=k;anTool('sig');anSigInfo();say('anMsg',`${tr('Signature prête')} : ${name}. ${tr('Touchez la page pour la poser.')}`)}
+function anSigInfo(){const s=an.lastSig&&SIGMEM[an.lastSig];$('anSigCur').textContent=s?`${tr('Signature prête')} : ${s.name}. ${tr('Touchez la page pour la poser.')}`:tr('Choisissez comment signer : à l\'écran, avec une image, ou une signature de la banque.')}
+function anPickSig(){openBank(anUseSig)}
+$('anSigDraw').onclick=()=>sgOpenCap('draw',anUseSig);$('anSigImg').onclick=()=>sgOpenCap('img',anUseSig);
 $('anSigPick').onclick=anPickSig;
 /* modèles de texte rapides */
 document.querySelectorAll('#anEd [data-q]').forEach(b=>b.onclick=()=>{const q=b.dataset.q,s=an.lastSig&&SIGMEM[an.lastSig]?SIGMEM[an.lastSig].name:'';const t={name:s||tr('Nom du signataire'),date:todayStr(),lu:tr('Lu et approuvé'),fait:LOC().startsWith('en')?`Done at ……………, on ${todayStr()}`:`Fait à ……………, le ${todayStr()}`}[q];const a=anSelA();
@@ -1501,7 +1514,7 @@ aeC.addEventListener('pointerdown',e=>{const p=pages[an.i];if(!p)return;anPts.se
     const h=anHit(nx,ny);an.sel=h;anSyncProps();if(h>=0){anSnap();anG={move:1,p0:[nx,ny],a0:JSON.stringify(annList(p)[h]),snap:1,moved:0}}else panStart();anDraw();return}
   if(nx<0||ny<0||nx>1||ny>1){panStart();return}
   const W=v.w,lw=+$('anSize').value/1400||.004;
-  if(t==='sig'){if(!an.lastSig||!SIGMEM[an.lastSig]){anPickSig();return}anSnap();const L=annList(p),s=SIGMEM[an.lastSig],w=.3*(p.out.width>p.out.height?.6:1),ar=s.ar;L.push({t:'sig',k:an.lastSig,cx:nx,cy:ny,w,rot:0});
+  if(t==='sig'){if(!an.lastSig||!SIGMEM[an.lastSig]){anSigInfo();say('anMsg',tr('Choisissez d\'abord une signature avec les boutons ci-dessous.'));return}anSnap();const L=annList(p),s=SIGMEM[an.lastSig],w=.3*(p.out.width>p.out.height?.6:1),ar=s.ar;L.push({t:'sig',k:an.lastSig,cx:nx,cy:ny,w,rot:0});
     let y=ny+w*ar/(v.h/v.w)/2+.006;const fs=w/14;if($('anSigName').checked){L.push({t:'text',x:nx-w/2,y,fs,txt:s.name,c:'#111111',b:0});y+=fs*1.3/(v.h/v.w)}if($('anSigDate').checked)L.push({t:'text',x:nx-w/2,y,fs,txt:`${tr('Signé le')} ${todayStr()}`,c:'#111111',b:0});
     an.sel=L.findIndex(a=>a.t==='sig'&&a.cx===nx&&a.cy===ny);anTool('sel');anSyncProps();anCommit();say('anMsg',tr('Signature posée. Glissez-la pour l\'ajuster ; le nom sous la signature se modifie en le sélectionnant.'));return}
   if(t==='text'){anSnap();const L=annList(p),txt=$('anTxt').value.trim()||tr('Texte');L.push({t:'text',x:nx,y:ny,fs:+$('anSize').value/700||.017,txt,c:an.col,b:$('anBold').checked?1:0});an.sel=L.length-1;anTool('sel');anSyncProps();anCommit();setTimeout(()=>{$('anTxt').focus();$('anTxt').select()},50);return}
@@ -2448,7 +2461,7 @@ $('csvBtn').onclick=async()=>{if(!hist.length){say('qrMsg','Historique vide.');r
 $('docPaper').value=paper;$('docPaper').onchange=e=>{paper=e.target.value;try{localStorage.setItem('scan_paper',paper)}catch(_){}pages.forEach(p=>{if(p.a4)render(p)});drawPages();say('docMsg','Format '+PAPER[paper].name+' appliqué aux pages.')};
 try{const v=localStorage.getItem('scan_lang');if(v)$('docLang').value=v}catch(e){}$('docLang').onchange=e=>{try{localStorage.setItem('scan_lang',e.target.value)}catch(_){}};
 drawPages();drawQr();setUI(UI);
-{const r=$('ready');r.textContent='✓ Application prête (v33)';r.style.color='#19c2a0'}
+{const r=$('ready');r.textContent='✓ Application prête (v34)';r.style.color='#19c2a0'}
 }
 </script>
 </body>
