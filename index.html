@@ -62,7 +62,7 @@ main{padding:18px max(4vw,16px) 40px;max-width:1240px;margin:0 auto}
 .ed .top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;background:var(--deep);color:#fff}
 .ed .top b{font-family:Archivo,sans-serif;font-size:16px;line-height:1.2}
 .ed .top .row{flex-wrap:nowrap;flex:none}
-.stage{flex:1;position:relative;display:grid;place-items:center;padding:14px;overflow:hidden;touch-action:none}
+.stage{flex:1;min-height:0;position:relative;display:grid;place-items:center;padding:14px;overflow:hidden;touch-action:none}#ed .tools{max-height:44vh;overflow-y:auto;flex:none}#edC{max-width:none!important;max-height:none!important}.zbtns{display:flex;align-items:center;gap:8px}.zbtns .note{margin:0 4px 0 0}.zbtns button{width:44px;height:40px;border-radius:50%;border:0;background:rgba(19,35,58,.82);color:#fff;font:700 20px Inter,sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .stage canvas{max-width:100%;max-height:100%;display:block;border-radius:4px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
 .tools{padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:var(--paper);border-top:1px solid var(--line);display:grid;gap:10px}
 .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
@@ -368,6 +368,7 @@ label.langbtn{display:inline-flex;align-items:center}
   <div class="top"><b id="edTitle">Page</b><div class="row"><button class="btn" id="edDel" style="min-height:40px">Supprimer</button><button class="btn pri" id="edOk" style="min-height:40px">Valider</button></div></div>
   <div class="stage" id="stage"><canvas id="edC"></canvas><canvas id="loupe" class="loupe" width="260" height="260" hidden></canvas></div>
   <div class="tools">
+    <div class="zbtns"><span class="note">Zoom</span><button id="edZo" aria-label="Zoom arrière">−</button><button id="edZi" aria-label="Zoom avant">+</button><button id="edZf" aria-label="Voir toute la page">⤢</button></div>
     <div class="chips" id="modeChips">
       <button class="chip" data-m="crop" aria-pressed="true">Recadrer</button>
       <button class="chip" data-m="view" aria-pressed="false">Aperçu</button>
@@ -467,13 +468,13 @@ label.langbtn{display:inline-flex;align-items:center}
       <div class="row" style="gap:6px"><button class="btn" id="rtL">↺ Gauche 90°</button><button class="btn" id="rtR">↻ Droite 90°</button><button class="btn" id="rtH">⇋ Retourner horizontalement</button><button class="btn" id="rtV">⇵ Retourner verticalement</button></div>
       <label class="sl">Par degré <span class="rtv"><input type="range" data-s="ang" min="-450" max="450" value="0" data-k="10"><b></b></span></label>
       <div class="row" style="gap:6px"><button class="btn" id="rtLine" aria-pressed="false">📏 Trait d'aide</button><button class="btn pri" id="rtAlign" disabled>⟂ Aligner</button><button class="btn" id="rtLnClr" disabled>Effacer le trait</button></div>
-      <div class="row"><button class="btn" id="rtMove" aria-pressed="false">✥ Déplacer dans le cadre</button></div>
+      <div class="row" style="gap:6px"><button class="btn" id="rtMove" aria-pressed="false">✥ Déplacer dans le cadre</button><button class="btn" id="rtMvCut">✂ Rogner la partie cachée</button></div>
       <div id="rtMvBox" class="rtmv" hidden>
         <label class="sl">Taille de l'image <span class="rtv"><input type="range" id="rtMvS" min="20" max="300" value="100"><b></b></span></label>
         <div class="row" style="gap:6px"><button class="btn" id="rtMvC">⊕ Recentrer</button><button class="btn" id="rtMvFit">Taille d'origine</button><button class="btn" id="rtMvFill">Remplir le cadre</button></div>
         <span class="lbl">Fond des zones découvertes</span>
         <div class="chips" id="rtMvBg"><button class="chip" data-bg="#ffffff">Blanc</button><button class="chip" data-bg="#000000">Noir</button><button class="chip" data-bg="transparent">Transparent</button><button class="chip" data-bg="pick"><span id="rtMvPickC" class="rtsw"></span>💧 Pipette</button></div>
-        <div class="row" style="gap:6px"><button class="btn" id="rtMvCut">✂ Rogner la partie cachée</button><button class="btn warn" id="rtMvOff">Recoller l'image au cadre</button></div>
+        <div class="row" style="gap:6px"><button class="btn warn" id="rtMvOff">Recoller l'image au cadre</button></div>
       </div>
       <span class="note" id="rtLineMsg">Touchez « 📏 Trait d'aide », puis deux points de l'image le long d'un bord qui devrait être droit (bord de la feuille, ligne de texte, mur) : le trait s'affiche. « ⟂ Aligner » cherche le bord du cadre le plus proche (horizontal ou vertical) et tourne l'image avec le trait jusqu'à ce qu'ils soient parallèles.</span>
     </div>
@@ -839,7 +840,7 @@ const I18N_RX=[[/(\d+) images? reçues?/g,'$1 image(s) received'],[/Client « (.
 [/Yeux parallèles à la ligne du menton (\d+) %/g,'Eyes parallel to chin line $1%'],[/axe des yeux ([+-]?[\d.]+)°/g,'eye axis $1°'],[/Gabarit : menton sur la ligne du bas, sommet du crâne entre l'ovale ([\d.]+) mm et l'ovale ([\d.]+) mm\./g,'Template: chin on the bottom line, crown between the $1 mm oval and the $2 mm oval.'],[/Perspective : 4 coins, bords droits\. Idéal pour une feuille bien plate prise de biais\./g,'Perspective: 4 corners, straight edges. Ideal for a flat sheet shot at an angle.'],
 [/Bords courbes : gros points = coins, petits points = bords\. Pour une feuille courbée ou gondolée\./g,'Curved edges: large dots = corners, small dots = edges. For a curved or wavy sheet.'],
 [/Grille : déplacez aussi les points intérieurs pour aplatir les bosses et les plis \(comme l'outil Déformation des logiciels de retouche\)\./g,'Grid: also move the inner points to flatten bumps and creases (like the Warp tool of photo editors).'],
-[/ Deux doigts : zoomer et déplacer · double-touche : zoom rapide\./g,' Two fingers: zoom and pan · double-tap: quick zoom.'],[/^✓ Application prête \(v(\d+)\)$/g,"✓ App ready (v$1)"],
+[/ Deux doigts ou boutons \+ \/ − : zoomer · un doigt hors des points : déplacer l'image · ⤢ : voir toute la page\./g,' Two fingers or + / − buttons: zoom · one finger away from the points: move the image · ⤢: show the whole page.'],[/^✓ Application prête \(v(\d+)\)$/g,"✓ App ready (v$1)"],
 [/(\d+) visages? détectés? sur la photo\./g,"$1 face(s) detected in the photo."],
 [/(\d+) visages?\b/g,"$1 face(s)"],
 [/(\d+) photos? de référence/g,"$1 reference photo(s)"],
@@ -912,7 +913,8 @@ Object.assign(I18N_EX,{"(fond)": "(background)", "position": "position", "(1 = d
 Object.assign(I18N_EX,{"📏 Trait d'aide": "📏 Guide line", "⟂ Aligner": "⟂ Align", "Effacer le trait": "Clear the line", "Touchez « 📏 Trait d'aide », puis deux points de l'image le long d'un bord qui devrait être droit (bord de la feuille, ligne de texte, mur) : le trait s'affiche. « ⟂ Aligner » cherche le bord du cadre le plus proche (horizontal ou vertical) et tourne l'image avec le trait jusqu'à ce qu'ils soient parallèles.": "Tap “📏 Guide line”, then two points of the image along an edge that should be straight (edge of the sheet, line of text, wall): the line appears. “⟂ Align” finds the nearest frame edge (horizontal or vertical) and turns the image with the line until they are parallel.", "Touchez un premier point sur un bord qui devrait être droit (bord de la feuille, ligne de texte, mur).": "Tap a first point on an edge that should be straight (edge of the sheet, line of text, wall).", "Trait d'aide désactivé.": "Guide line turned off.", "Trait effacé : touchez un premier point.": "Line cleared: tap a first point.", "Les deux points sont trop proches : éloignez-les.": "The two points are too close: move them apart.", "Aligné": "Aligned", "image tournée de": "image turned by", "— le trait est maintenant parallèle au bord horizontal du cadre.": "— the line is now parallel to the horizontal frame edge.", "— le trait est maintenant parallèle au bord vertical du cadre.": "— the line is now parallel to the vertical frame edge.", "(limite de 45° atteinte : utilisez aussi ↺ / ↻ 90°)": "(45° limit reached: also use ↺ / ↻ 90°)", "Premier point posé : touchez le second point plus loin sur le même bord.": "First point set: tap the second point further along the same edge.", "Trait tracé. Déplacez un point du doigt pour l'ajuster, puis touchez « Aligner ».": "Line drawn. Drag a point with your finger to adjust it, then tap “Align”."});
 Object.assign(I18N_EX,{"✥ Déplacer dans le cadre": "✥ Move within the frame", "Taille de l'image": "Image size", "⊕ Recentrer": "⊕ Re-centre", "Taille d'origine": "Original size", "Remplir le cadre": "Fill the frame", "Fond des zones découvertes": "Background of uncovered areas", "Blanc": "White", "Noir": "Black", "Transparent": "Transparent", "💧 Pipette": "💧 Colour picker", "Recoller l'image au cadre": "Re-attach the image to the frame", "L'image est détachée du cadre : faites-la glisser du doigt, pincez pour l'agrandir ou la réduire.": "The image is detached from the frame: drag it with your finger, pinch to enlarge or reduce it.", "Image recollée au cadre : elle le remplit de nouveau automatiquement.": "Image re-attached to the frame: it fills it automatically again.", "Touchez l'image à l'endroit dont vous voulez la couleur pour le fond.": "Tap the image where you want to take the background colour from."});
 Object.assign(I18N_EX,{"Remplissage de la page": "Page filling", "Image entière": "Whole image", "Remplir la page (bords coupés)": "Fill the page (edges cut)", "Étirer sur la page (déforme)": "Stretch over the page (distorts)", "Fond de la page": "Page background", "Gris clair": "Light grey", "Crème": "Cream", "💧 Couleur de l'image": "💧 Colour from the image", "🎨 Autre": "🎨 Other", "Contour de l'image": "Image border", "Aucun": "None", "Fin": "Thin", "Moyen": "Medium", "Épais": "Thick", "Couleur": "Colour", "Appliquer ces réglages (position, taille, remplissage, fond, contour) à toutes les images": "Apply these settings (position, size, filling, background, border) to all images", "Touchez l'image dans l'aperçu pour prendre sa couleur comme fond de page.": "Tap the image in the preview to use its colour as the page background.", "page remplie": "page filled", "étirée": "stretched", "fond": "background", "contour": "border"});
-Object.assign(I18N_EX,{"✂ Rogner la partie cachée": "✂ Crop the hidden part", "Couper définitivement les parties de l'image sorties du cadre ? Le cadre garde sa taille ; « Annuler » ne pourra pas revenir avant cette étape.": "Permanently cut the parts of the image outside the frame? The frame keeps its size; “Undo” will not be able to go back before this step.", "Parties sorties du cadre coupées. L'image restante peut encore être déplacée ou retouchée.": "Parts outside the frame cut. The remaining image can still be moved or edited."});
+Object.assign(I18N_EX,{"Touchez d'abord « ✥ Déplacer dans le cadre » et déplacez l'image.":"First tap “✥ Move within the frame” and move the image.","✂ Rogner la partie cachée": "✂ Crop the hidden part", "Couper définitivement les parties de l'image sorties du cadre ? Le cadre garde sa taille ; « Annuler » ne pourra pas revenir avant cette étape.": "Permanently cut the parts of the image outside the frame? The frame keeps its size; “Undo” will not be able to go back before this step.", "Parties sorties du cadre coupées. L'image restante peut encore être déplacée ou retouchée.": "Parts outside the frame cut. The remaining image can still be moved or edited."});
+Object.assign(I18N_EX,{"Zoom arrière": "Zoom out", "Zoom avant": "Zoom in", "Voir toute la page": "Show the whole page"});
 function tr(s){if(UI!=='en'||!s)return s;const t=s.trim();if(!t)return s;if(Object.prototype.hasOwnProperty.call(I18N_EX,t))return s.replace(t,I18N_EX[t]);let o=s;for(const[r,rep]of I18N_RX)o=o.replace(r,rep);return o}
 const LOC=()=>UI==='en'?'en-GB':'fr-FR';
 const ORIG=new WeakMap(),LAST=new WeakMap();
@@ -1398,7 +1400,7 @@ $('rtMvS').oninput=e=>{rt.S.mv.s=+e.target.value/100;rtMvUI();rtDraw()};$('rtMvS
 $('rtMvC').onclick=()=>{rtSnap();rt.S.mv.x=rt.S.mv.y=0;rtMvUI();rtDraw()};
 $('rtMvFit').onclick=()=>{rtSnap();rt.S.mv.s=1;rt.S.mv.x=rt.S.mv.y=0;rtMvUI();rtDraw()};
 $('rtMvFill').onclick=()=>{rtSnap();const P=rtStage(rt.sm,{...rt.S,ang:0,mv:null,crop:null},'crop');rt.S.mv.s=Math.round(1/rtRotK(P.width,P.height,rt.S.ang)*1000)/1000;rt.S.mv.x=rt.S.mv.y=0;rtMvUI();rtDraw()};
-$('rtMvCut').onclick=()=>{const S=rt.S,m=S.mv;if(!m)return;if(!confirm(tr("Couper définitivement les parties de l'image sorties du cadre ? Le cadre garde sa taille ; « Annuler » ne pourra pas revenir avant cette étape.")))return;
+$('rtMvCut').onclick=()=>{const S=rt.S,m=S.mv;if(!m){say('rtLineMsg',tr("Touchez d'abord « ✥ Déplacer dans le cadre » et déplacez l'image."));return}if(!confirm(tr("Couper définitivement les parties de l'image sorties du cadre ? Le cadre garde sa taille ; « Annuler » ne pourra pas revenir avant cette étape.")))return;
   const G={...rtDef(),q:S.q,fh:S.fh,fv:S.fv,ang:S.ang,mv:m,red:S.red},src=rtStage(rt.src,G,'crop'),sm=rtStage(rt.sm,G,'crop');rt.src=src;rt.sm=sm;if(rt.layers){rt.layers[rt.cur].src=src;rt.layers[rt.cur].sm=sm}
   if(m.bg==='transparent')S.tbg=true;S.q=0;S.fh=S.fv=false;S.ang=0;S.red=[];S.mv={x:0,y:0,s:1,bg:m.bg};rt.undo=[];rt.redo=[];rt.enter=JSON.stringify(S);rt.enterU=0;rtSync();rtMvUI();rtDraw();
   say('rtLineMsg',tr("Parties sorties du cadre coupées. L'image restante peut encore être déplacée ou retouchée."))};
@@ -2099,7 +2101,7 @@ function syncChips(){document.querySelectorAll('#modeChips [data-m]').forEach(b=
   document.querySelectorAll('#filtChips [data-f]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===work.filter));$('edA4').setAttribute('aria-pressed',!!work.a4);
   const G=work.geo,key=G.kind==='mesh'?'mesh'+G.n:G.kind;document.querySelectorAll('#defChips [data-k]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===key));
   $('edInterp').textContent=G.interp==='linear'?'Segments droits':'Courbes lisses';$('edInterp').setAttribute('aria-pressed',G.interp==='linear');$('edInterp').disabled=G.kind==='persp';
-  $('edNote').textContent=NOTES0[G.kind]+' Deux doigts : zoomer et déplacer · double-touche : zoom rapide.'}
+  $('edNote').textContent=NOTES0[G.kind]+' Deux doigts ou boutons + / − : zoomer · un doigt hors des points : déplacer l\'image · ⤢ : voir toute la page.'}
 function drawEd(){
   if(mode==='view'){render(work);const o=work.out;edC.width=o.width;edC.height=o.height;ex.drawImage(o,0,0);return}
   const s=work.src,G=work.geo,f=mapFn(G),P=G.pts;edC.width=s.width;edC.height=s.height;
@@ -2122,7 +2124,7 @@ let vz=1,vx=0,vy=0,pz=null,pan=null;const tp=new Map(),stg=$('stage');edC.style.
 function applyView(){edC.style.transform=vz===1&&!vx&&!vy?'':`translate(${vx}px,${vy}px) scale(${vz})`}
 function resetView(){vz=1;vx=0;vy=0;applyView()}
 function origin(){const r=edC.getBoundingClientRect();return[r.left-vx,r.top-vy]}
-function zoomAt(cx,cy,s2,base){const[ox,oy]=base.o,lx=(base.m[0]-ox-base.vx)/base.vz,ly=(base.m[1]-oy-base.vy)/base.vz;vz=s2;vx=cx-ox-lx*s2;vy=cy-oy-ly*s2;if(vz<=1.001){resetView()}else applyView()}
+function zoomAt(cx,cy,s2,base){const[ox,oy]=base.o,lx=(base.m[0]-ox-base.vx)/base.vz,ly=(base.m[1]-oy-base.vy)/base.vz;vz=s2;vx=cx-ox-lx*s2;vy=cy-oy-ly*s2;if(vz<=1.001&&base.vz>1.001){resetView()}else applyView()}
 stg.addEventListener('pointerdown',e=>{tp.set(e.pointerId,[e.clientX,e.clientY]);try{stg.setPointerCapture(e.pointerId)}catch(_){}
   if(tp.size===2){if(drag>=0){drag=-1;lp.hidden=true;drawEd()}pan=null;const[a,b]=[...tp.values()];pz={d:Math.hypot(a[0]-b[0],a[1]-b[1])||1,m:[(a[0]+b[0])/2,(a[1]+b[1])/2],vz,vx,vy,o:origin()};return}
   if(tp.size>2)return;
@@ -2133,7 +2135,12 @@ stg.addEventListener('pointerdown',e=>{tp.set(e.pointerId,[e.clientX,e.clientY])
 stg.addEventListener('pointermove',e=>{if(!tp.has(e.pointerId))return;tp.set(e.pointerId,[e.clientX,e.clientY]);
   if(tp.size>=2&&pz){const[a,b]=[...tp.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]),m=[(a[0]+b[0])/2,(a[1]+b[1])/2];zoomAt(m[0],m[1],Math.min(8,Math.max(1,pz.vz*d/pz.d)),pz);return}
   if(drag>=0){const p=pt(e);work.geo.pts[drag]=[Math.max(0,Math.min(edC.width,p[0])),Math.max(0,Math.min(edC.height,p[1]))];drawEd();drawLoupe(work.geo.pts[drag],e);return}
-  if(pan&&vz>1){vx=pan.vx+e.clientX-pan.x;vy=pan.vy+e.clientY-pan.y;applyView()}});
+  if(pan){vx=pan.vx+e.clientX-pan.x;vy=pan.vy+e.clientY-pan.y;applyView()}});
+function fitEd(){const st=stg,cs=getComputedStyle(st),W=st.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),H=st.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);if(W<10||H<10||!edC.width)return;const k=Math.min(W/edC.width,H/edC.height);edC.style.width=Math.floor(edC.width*k)+'px';edC.style.height=Math.floor(edC.height*k)+'px'}
+{const _de=drawEd;drawEd=function(){_de();fitEd()}}
+try{new ResizeObserver(()=>{if(!$('ed').hidden)fitEd()}).observe(stg)}catch(_){addEventListener('resize',fitEd)}
+const zBy=f=>{const r=stg.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;zoomAt(cx,cy,Math.min(8,Math.max(1,vz*f)),{m:[cx,cy],vz,vx,vy,o:origin()});if(vz<=1.001)resetView()};
+['edZo','edZi','edZf'].forEach(id=>{const b=$(id);b.addEventListener('pointerdown',e=>e.stopPropagation());b.onclick=e=>{e.stopPropagation();if(id==='edZi')zBy(1.6);else if(id==='edZo')zBy(1/1.6);else resetView()}});
 const endPtr=e=>{tp.delete(e.pointerId);if(tp.size<2)pz=null;if(tp.size===1){const[q]=[...tp.values()];pan={x:q[0],y:q[1],vx,vy}}
   if(!tp.size){pan=null;if(drag>=0){drag=-1;lp.hidden=true;drawEd()}}};
 stg.addEventListener('pointerup',endPtr);
@@ -2934,7 +2941,7 @@ function hmNav(k){const was=hmCur||'home';hmCur=k;const b=$('hmBack');if(!b)retu
   try{if(k!=='home'&&!(history.state&&history.state.tv))history.pushState({tv:1},'')}catch(e){}}
 $('hmBackBtn').onclick=()=>{if(history.state&&history.state.tv)history.back();else tab('home')};
 addEventListener('popstate',()=>{if(hmCur&&hmCur!=='home'&&!(history.state&&history.state.tv))tab('home')});
-{const r=$('ready');r.textContent='✓ Application prête (v52)';r.style.color='#19c2a0';setTimeout(()=>{$('readyP').hidden=true},4000)}
+{const r=$('ready');r.textContent='✓ Application prête (v54)';r.style.color='#19c2a0';setTimeout(()=>{$('readyP').hidden=true},4000)}
 }
 </script>
 </body>
